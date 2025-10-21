@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
   const navigate = useNavigate();
-  const [authorized, setAuthorized] = useState(null); // awalnya null
+  const [authorized, setAuthorized] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -19,7 +19,7 @@ export default function ProtectedRoute({ children }) {
         }
 
         setAuthorized(true);
-      } catch (err) {
+      } catch {
         navigate("/", { replace: true });
       }
     };
@@ -27,11 +27,8 @@ export default function ProtectedRoute({ children }) {
     checkAuth();
   }, [navigate]);
 
-  // sementara loading biar gak blank
   if (authorized === null) {
-    return (
-      <div className="text-center mt-20 text-gray-500">Checking access...</div>
-    );
+    return <div className="text-center mt-20 text-gray-500">Checking access...</div>;
   }
 
   return children;
