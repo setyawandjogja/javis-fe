@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
   const navigate = useNavigate();
@@ -14,12 +14,14 @@ export default function ProtectedRoute({ children }) {
         });
 
         if (!res.ok) {
+          setAuthorized(false);
           navigate("/", { replace: true });
           return;
         }
 
         setAuthorized(true);
       } catch {
+        setAuthorized(false);
         navigate("/", { replace: true });
       }
     };
@@ -30,6 +32,8 @@ export default function ProtectedRoute({ children }) {
   if (authorized === null) {
     return <div className="text-center mt-20 text-gray-500">Checking access...</div>;
   }
+
+  if (!authorized) return <Navigate to="/" replace />;
 
   return children;
 }
